@@ -1,0 +1,385 @@
+
+DawidSiwakLab3.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000019a  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000001ee  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  000001ee  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000220  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000090  00000000  00000000  0000025c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   0000091d  00000000  00000000  000002ec  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000741  00000000  00000000  00000c09  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000593  00000000  00000000  0000134a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000ec  00000000  00000000  000018e0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000397  00000000  00000000  000019cc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    0000029f  00000000  00000000  00001d63  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000080  00000000  00000000  00002002  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 bd 00 	call	0x17a	; 0x17a <main>
+  64:	0c 94 cb 00 	jmp	0x196	; 0x196 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <LED_konf>:
+ *  Author: Student_PL
+ */ 
+#include "diody.h"
+
+void LED_konf (){
+	DDRB=0xFF;
+  6c:	8f ef       	ldi	r24, 0xFF	; 255
+  6e:	87 bb       	out	0x17, r24	; 23
+	PORTB=0x00;
+  70:	18 ba       	out	0x18, r1	; 24
+  72:	08 95       	ret
+
+00000074 <SW_konf>:
+ */ 
+#include "klawiatura.h"
+
+void SW_konf()
+{
+	keypadDDR = 0xF0; // Konfiguracja DDR do prawidlowej obslugi i pracy klawiatury
+  74:	80 ef       	ldi	r24, 0xF0	; 240
+  76:	84 bb       	out	0x14, r24	; 20
+	keypadPORT = 0x0F; // Konfiguracja PORT do prawidlowej obslugi i pracy klawiatury
+  78:	8f e0       	ldi	r24, 0x0F	; 15
+  7a:	85 bb       	out	0x15, r24	; 21
+  7c:	08 95       	ret
+
+0000007e <SW_odczyt>:
+}
+
+int SW_odczyt()
+{
+	return keypadPIN&0x0F;
+  7e:	83 b3       	in	r24, 0x13	; 19
+  80:	8f 70       	andi	r24, 0x0F	; 15
+}
+  82:	90 e0       	ldi	r25, 0x00	; 0
+  84:	08 95       	ret
+
+00000086 <SW_czytaj>:
+
+int SW_czytaj() // funkcja getkey
+{
+  86:	ef 92       	push	r14
+  88:	ff 92       	push	r15
+  8a:	0f 93       	push	r16
+  8c:	1f 93       	push	r17
+  8e:	cf 93       	push	r28
+  90:	df 93       	push	r29
+	
+	int y = 0; // zerowanie zmiennej y odpowiadaj¹cej za iloœæ przyciœniêtych przycisków podczas wszystkich obrotów pêtli
+	int wynik = 0; // zerowanie zmiennej wynik odpowiada jaka wartosc ostatecznie jest zwracana z funkcji
+	int x = 0;
+
+	for(int i=4;i<8;i++) // pêtla odpowiadaj¹ca za szukanie po kolumnach klawiatury
+  92:	c4 e0       	ldi	r28, 0x04	; 4
+  94:	d0 e0       	ldi	r29, 0x00	; 0
+
+int SW_czytaj() // funkcja getkey
+{
+	
+	int y = 0; // zerowanie zmiennej y odpowiadaj¹cej za iloœæ przyciœniêtych przycisków podczas wszystkich obrotów pêtli
+	int wynik = 0; // zerowanie zmiennej wynik odpowiada jaka wartosc ostatecznie jest zwracana z funkcji
+  96:	e1 2c       	mov	r14, r1
+  98:	f1 2c       	mov	r15, r1
+}
+
+int SW_czytaj() // funkcja getkey
+{
+	
+	int y = 0; // zerowanie zmiennej y odpowiadaj¹cej za iloœæ przyciœniêtych przycisków podczas wszystkich obrotów pêtli
+  9a:	00 e0       	ldi	r16, 0x00	; 0
+  9c:	10 e0       	ldi	r17, 0x00	; 0
+	int wynik = 0; // zerowanie zmiennej wynik odpowiada jaka wartosc ostatecznie jest zwracana z funkcji
+	int x = 0;
+
+	for(int i=4;i<8;i++) // pêtla odpowiadaj¹ca za szukanie po kolumnach klawiatury
+  9e:	54 c0       	rjmp	.+168    	; 0x148 <SW_czytaj+0xc2>
+	{
+
+		keypadPORT = ~_BV(i); // wybranie (i-3)’tej kolumny
+  a0:	81 e0       	ldi	r24, 0x01	; 1
+  a2:	90 e0       	ldi	r25, 0x00	; 0
+  a4:	0c 2e       	mov	r0, r28
+  a6:	02 c0       	rjmp	.+4      	; 0xac <SW_czytaj+0x26>
+  a8:	88 0f       	add	r24, r24
+  aa:	99 1f       	adc	r25, r25
+  ac:	0a 94       	dec	r0
+  ae:	e2 f7       	brpl	.-8      	; 0xa8 <SW_czytaj+0x22>
+  b0:	80 95       	com	r24
+  b2:	85 bb       	out	0x15, r24	; 21
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  b4:	89 ef       	ldi	r24, 0xF9	; 249
+  b6:	90 e0       	ldi	r25, 0x00	; 0
+  b8:	01 97       	sbiw	r24, 0x01	; 1
+  ba:	f1 f7       	brne	.-4      	; 0xb8 <SW_czytaj+0x32>
+  bc:	00 c0       	rjmp	.+0      	; 0xbe <SW_czytaj+0x38>
+  be:	00 00       	nop
+		_delay_ms(1);// opoznienie 1ms
+		x = SW_odczyt(); // odczytaj i zapamiêtaj stan klawiatury
+  c0:	0e 94 3f 00 	call	0x7e	; 0x7e <SW_odczyt>
+  c4:	e9 ef       	ldi	r30, 0xF9	; 249
+  c6:	f0 e0       	ldi	r31, 0x00	; 0
+  c8:	31 97       	sbiw	r30, 0x01	; 1
+  ca:	f1 f7       	brne	.-4      	; 0xc8 <SW_czytaj+0x42>
+  cc:	00 c0       	rjmp	.+0      	; 0xce <SW_czytaj+0x48>
+  ce:	00 00       	nop
+		//PORTC = x;
+		_delay_ms(1);// opoznienie 1ms
+
+		switch(x) // wybor po odczytanym stanie klawiatury
+  d0:	8b 30       	cpi	r24, 0x0B	; 11
+  d2:	91 05       	cpc	r25, r1
+  d4:	f9 f0       	breq	.+62     	; 0x114 <SW_czytaj+0x8e>
+  d6:	24 f4       	brge	.+8      	; 0xe0 <SW_czytaj+0x5a>
+  d8:	87 30       	cpi	r24, 0x07	; 7
+  da:	91 05       	cpc	r25, r1
+  dc:	29 f1       	breq	.+74     	; 0x128 <SW_czytaj+0xa2>
+  de:	2e c0       	rjmp	.+92     	; 0x13c <SW_czytaj+0xb6>
+  e0:	8d 30       	cpi	r24, 0x0D	; 13
+  e2:	91 05       	cpc	r25, r1
+  e4:	69 f0       	breq	.+26     	; 0x100 <SW_czytaj+0x7a>
+  e6:	8e 30       	cpi	r24, 0x0E	; 14
+  e8:	91 05       	cpc	r25, r1
+  ea:	41 f5       	brne	.+80     	; 0x13c <SW_czytaj+0xb6>
+
+		{
+			case 0b00001110: // pierwszy wiersz
+			y=y+1; // zwiêkszenie zmiennej pomocniczej o 1
+  ec:	0f 5f       	subi	r16, 0xFF	; 255
+  ee:	1f 4f       	sbci	r17, 0xFF	; 255
+			if(y>1) // jeœli zosta³ ju¿ przyciœniêty jakiœ przycisk klawiatury zwróæ wartoœæ 255
+  f0:	02 30       	cpi	r16, 0x02	; 2
+  f2:	11 05       	cpc	r17, r1
+  f4:	84 f5       	brge	.+96     	; 0x156 <SW_czytaj+0xd0>
+
+			{return 255;
+			}
+			else{
+				wynik = i-3;  // zapisz wartoœæ przycisku
+  f6:	7e 01       	movw	r14, r28
+  f8:	f3 e0       	ldi	r31, 0x03	; 3
+  fa:	ef 1a       	sub	r14, r31
+  fc:	f1 08       	sbc	r15, r1
+			}
+			break;
+  fe:	23 c0       	rjmp	.+70     	; 0x146 <SW_czytaj+0xc0>
+			case 0b00001101: // drugi wiersz
+			y=y+1; // zwiêkszenie zmiennej pomocniczej o 1
+ 100:	0f 5f       	subi	r16, 0xFF	; 255
+ 102:	1f 4f       	sbci	r17, 0xFF	; 255
+			if(y>1) // jeœli zosta³ ju¿ przyciœniêty jakiœ przycisk klawiatury zwróæ wartoœæ 255
+ 104:	02 30       	cpi	r16, 0x02	; 2
+ 106:	11 05       	cpc	r17, r1
+ 108:	4c f5       	brge	.+82     	; 0x15c <SW_czytaj+0xd6>
+			{return 255;
+			}
+			else{
+				wynik = i+1; // zapisz wartoœæ przycisku
+ 10a:	7e 01       	movw	r14, r28
+ 10c:	2f ef       	ldi	r18, 0xFF	; 255
+ 10e:	e2 1a       	sub	r14, r18
+ 110:	f2 0a       	sbc	r15, r18
+			}
+			break;
+ 112:	19 c0       	rjmp	.+50     	; 0x146 <SW_czytaj+0xc0>
+			case 0b00001011: // trzeci wiersz
+			y=y+1; ; // zwiêkszenie zmiennej pomocniczej o 1
+ 114:	0f 5f       	subi	r16, 0xFF	; 255
+ 116:	1f 4f       	sbci	r17, 0xFF	; 255
+			if(y>1) // jeœli zosta³ ju¿ przyciœniêty jakiœ przycisk klawiatury zwróæ wartoœæ 255
+ 118:	02 30       	cpi	r16, 0x02	; 2
+ 11a:	11 05       	cpc	r17, r1
+ 11c:	14 f5       	brge	.+68     	; 0x162 <SW_czytaj+0xdc>
+			{return 255;
+			}
+			else{
+				wynik = i+5; // zapisz wartoœæ przycisku
+ 11e:	7e 01       	movw	r14, r28
+ 120:	85 e0       	ldi	r24, 0x05	; 5
+ 122:	e8 0e       	add	r14, r24
+ 124:	f1 1c       	adc	r15, r1
+			}
+			break;
+ 126:	0f c0       	rjmp	.+30     	; 0x146 <SW_czytaj+0xc0>
+			case 0b00000111: // czwarty wiersz
+			y=y+1; // zwiêkszenie zmiennej pomocniczej o 1
+ 128:	0f 5f       	subi	r16, 0xFF	; 255
+ 12a:	1f 4f       	sbci	r17, 0xFF	; 255
+
+			if(y>1)// jeœli zosta³ ju¿ przyciœniêty jakiœ przycisk klawiatury zwróæ wartoœæ 255
+ 12c:	02 30       	cpi	r16, 0x02	; 2
+ 12e:	11 05       	cpc	r17, r1
+ 130:	dc f4       	brge	.+54     	; 0x168 <SW_czytaj+0xe2>
+			{return 255;
+			}
+			else{
+				wynik =i+9; // zapisz wartoœæ przycisku
+ 132:	7e 01       	movw	r14, r28
+ 134:	99 e0       	ldi	r25, 0x09	; 9
+ 136:	e9 0e       	add	r14, r25
+ 138:	f1 1c       	adc	r15, r1
+			}
+			break;
+ 13a:	05 c0       	rjmp	.+10     	; 0x146 <SW_czytaj+0xc0>
+			default: // wykona siê gdy nie wykryto ¿adnego case z powy¿szych
+
+			if(x!=0b00001111) // jeœli wartoœæ odczytana jest ró¿na od wartoœci braku przyciœniêtych przycisków. Warunek ten stosujemy w celu uzyskania informacji czy przyciœniêto wiêcej ni¿ jeden przycisk w kolumnie
+ 13c:	0f 97       	sbiw	r24, 0x0f	; 15
+ 13e:	19 f0       	breq	.+6      	; 0x146 <SW_czytaj+0xc0>
+			{
+
+				wynik = 255; // jeœli warunek zosta³ spe³niony zapisz w zmiennej wynik wartoœæ 255
+ 140:	ee 24       	eor	r14, r14
+ 142:	ea 94       	dec	r14
+ 144:	f1 2c       	mov	r15, r1
+	
+	int y = 0; // zerowanie zmiennej y odpowiadaj¹cej za iloœæ przyciœniêtych przycisków podczas wszystkich obrotów pêtli
+	int wynik = 0; // zerowanie zmiennej wynik odpowiada jaka wartosc ostatecznie jest zwracana z funkcji
+	int x = 0;
+
+	for(int i=4;i<8;i++) // pêtla odpowiadaj¹ca za szukanie po kolumnach klawiatury
+ 146:	21 96       	adiw	r28, 0x01	; 1
+ 148:	c8 30       	cpi	r28, 0x08	; 8
+ 14a:	d1 05       	cpc	r29, r1
+ 14c:	0c f4       	brge	.+2      	; 0x150 <SW_czytaj+0xca>
+ 14e:	a8 cf       	rjmp	.-176    	; 0xa0 <SW_czytaj+0x1a>
+
+	}
+
+
+
+	return wynik; // zwróæ nr naciœniêtego przycisku lub kod zgodny z treœci¹ zadania
+ 150:	8e 2d       	mov	r24, r14
+ 152:	9f 2d       	mov	r25, r15
+ 154:	0b c0       	rjmp	.+22     	; 0x16c <SW_czytaj+0xe6>
+		{
+			case 0b00001110: // pierwszy wiersz
+			y=y+1; // zwiêkszenie zmiennej pomocniczej o 1
+			if(y>1) // jeœli zosta³ ju¿ przyciœniêty jakiœ przycisk klawiatury zwróæ wartoœæ 255
+
+			{return 255;
+ 156:	8f ef       	ldi	r24, 0xFF	; 255
+ 158:	90 e0       	ldi	r25, 0x00	; 0
+ 15a:	08 c0       	rjmp	.+16     	; 0x16c <SW_czytaj+0xe6>
+			}
+			break;
+			case 0b00001101: // drugi wiersz
+			y=y+1; // zwiêkszenie zmiennej pomocniczej o 1
+			if(y>1) // jeœli zosta³ ju¿ przyciœniêty jakiœ przycisk klawiatury zwróæ wartoœæ 255
+			{return 255;
+ 15c:	8f ef       	ldi	r24, 0xFF	; 255
+ 15e:	90 e0       	ldi	r25, 0x00	; 0
+ 160:	05 c0       	rjmp	.+10     	; 0x16c <SW_czytaj+0xe6>
+			}
+			break;
+			case 0b00001011: // trzeci wiersz
+			y=y+1; ; // zwiêkszenie zmiennej pomocniczej o 1
+			if(y>1) // jeœli zosta³ ju¿ przyciœniêty jakiœ przycisk klawiatury zwróæ wartoœæ 255
+			{return 255;
+ 162:	8f ef       	ldi	r24, 0xFF	; 255
+ 164:	90 e0       	ldi	r25, 0x00	; 0
+ 166:	02 c0       	rjmp	.+4      	; 0x16c <SW_czytaj+0xe6>
+			break;
+			case 0b00000111: // czwarty wiersz
+			y=y+1; // zwiêkszenie zmiennej pomocniczej o 1
+
+			if(y>1)// jeœli zosta³ ju¿ przyciœniêty jakiœ przycisk klawiatury zwróæ wartoœæ 255
+			{return 255;
+ 168:	8f ef       	ldi	r24, 0xFF	; 255
+ 16a:	90 e0       	ldi	r25, 0x00	; 0
+
+
+
+	return wynik; // zwróæ nr naciœniêtego przycisku lub kod zgodny z treœci¹ zadania
+
+ 16c:	df 91       	pop	r29
+ 16e:	cf 91       	pop	r28
+ 170:	1f 91       	pop	r17
+ 172:	0f 91       	pop	r16
+ 174:	ff 90       	pop	r15
+ 176:	ef 90       	pop	r14
+ 178:	08 95       	ret
+
+0000017a <main>:
+#include "diody.h"
+
+
+int main(void)
+{
+	LED_konf();
+ 17a:	0e 94 36 00 	call	0x6c	; 0x6c <LED_konf>
+	SW_konf();
+ 17e:	0e 94 3a 00 	call	0x74	; 0x74 <SW_konf>
+    while (1) 
+    {
+		PORTA = SW_czytaj();
+ 182:	0e 94 43 00 	call	0x86	; 0x86 <SW_czytaj>
+ 186:	8b bb       	out	0x1b, r24	; 27
+ 188:	83 ef       	ldi	r24, 0xF3	; 243
+ 18a:	91 e0       	ldi	r25, 0x01	; 1
+ 18c:	01 97       	sbiw	r24, 0x01	; 1
+ 18e:	f1 f7       	brne	.-4      	; 0x18c <main+0x12>
+ 190:	00 c0       	rjmp	.+0      	; 0x192 <main+0x18>
+ 192:	00 00       	nop
+ 194:	f6 cf       	rjmp	.-20     	; 0x182 <main+0x8>
+
+00000196 <_exit>:
+ 196:	f8 94       	cli
+
+00000198 <__stop_program>:
+ 198:	ff cf       	rjmp	.-2      	; 0x198 <__stop_program>
